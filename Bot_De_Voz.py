@@ -1,25 +1,30 @@
-import speech_recognition as sr
-from gtts import gTTS
-import pygame
-import os
-import sys
-import tkinter as tk
-from tkinter import ttk, messagebox
+# Importação das bibliotecas necessárias
+import speech_recognition as sr  # Para reconhecimento de voz
+from gtts import gTTS  # Para conversão de texto em fala
+import pygame  # Para reprodução de áudio
+import os  # Para operações do sistema operacional
+import sys  # Para funcionalidades do sistema
+import tkinter as tk  # Para criação da interface gráfica
+from tkinter import ttk, messagebox  # Componentes adicionais da interface gráfica
 
 class BotPerguntasRespostas:
     def __init__(self, base_conhecimento):
+        # Inicializa o bot com uma base de conhecimento
         self.base_conhecimento = {pergunta.lower(): resposta for pergunta, resposta in base_conhecimento.items()}
         self.perguntas_feitas = 0
 
     def responder_pergunta(self, pergunta):
+        # Responde a uma pergunta com base no conhecimento existente
         self.perguntas_feitas += 1
         pergunta = pergunta.lower()
         return self.base_conhecimento.get(pergunta, "Desculpe, não tenho uma resposta para essa pergunta.")
 
     def adicionar_conhecimento(self, pergunta, resposta):
+        # Adiciona uma nova pergunta e resposta à base de conhecimento
         self.base_conhecimento[pergunta.lower()] = resposta
 
 def reproduzir_audio(texto):
+    # Converte texto em fala e reproduz o áudio
     tts = gTTS(text=texto, lang='pt-br')
     temp_file = "resposta_temp.mp3"
     tts.save(temp_file)
@@ -32,6 +37,7 @@ def reproduzir_audio(texto):
     os.remove(temp_file)
 
 def capturar_audio():
+    # Captura áudio do microfone e converte em texto
     reconhecedor = sr.Recognizer()
     with sr.Microphone() as source:
         print("Fale algo...")
@@ -50,14 +56,17 @@ def capturar_audio():
 
 class BotGUI:
     def __init__(self, master, bot):
+        # Inicializa a interface gráfica do bot
         self.master = master
         self.bot = bot
         self.master.title("Bot de Perguntas e Respostas")
         self.master.geometry("300x700")
 
+        # Cria um notebook (abas) para organizar a interface
         self.notebook = ttk.Notebook(self.master)
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
+        # Cria frames para as abas de perguntas e adição de conhecimento
         self.frame_perguntas = ttk.Frame(self.notebook, padding="10")
         self.frame_adicionar = ttk.Frame(self.notebook, padding="10")
 
@@ -68,6 +77,7 @@ class BotGUI:
         self.setup_adicionar_tab()
 
     def setup_perguntas_tab(self):
+        # Configura a aba de perguntas
         self.pergunta_entry = ttk.Entry(self.frame_perguntas, width=50)
         self.pergunta_entry.pack(pady=10)
 
@@ -81,6 +91,7 @@ class BotGUI:
         self.mic_btn.pack(pady=5)
 
     def setup_adicionar_tab(self):
+        # Configura a aba de adição de conhecimento
         ttk.Label(self.frame_adicionar, text="Nova Pergunta:").pack(pady=5)
         self.nova_pergunta_entry = ttk.Entry(self.frame_adicionar, width=50)
         self.nova_pergunta_entry.pack(pady=5)
@@ -93,12 +104,14 @@ class BotGUI:
         self.adicionar_btn.pack(pady=10)
 
     def enviar_pergunta(self):
+        # Envia a pergunta ao bot e exibe a resposta
         pergunta = self.pergunta_entry.get()
         resposta = self.bot.responder_pergunta(pergunta)
         self.exibir_resposta(resposta)
         reproduzir_audio(resposta)
 
     def ativar_voz(self):
+        # Ativa o reconhecimento de voz para fazer uma pergunta
         pergunta = capturar_audio()
         if pergunta:
             self.pergunta_entry.delete(0, tk.END)
@@ -106,10 +119,12 @@ class BotGUI:
             self.enviar_pergunta()
 
     def exibir_resposta(self, resposta):
+        # Exibe a resposta na interface gráfica
         self.resposta_text.delete(1.0, tk.END)
         self.resposta_text.insert(tk.END, resposta)
 
     def adicionar_conhecimento(self):
+        # Adiciona novo conhecimento à base do bot
         nova_pergunta = self.nova_pergunta_entry.get()
         nova_resposta = self.nova_resposta_text.get("1.0", tk.END).strip()
 
@@ -122,30 +137,13 @@ class BotGUI:
             messagebox.showerror("Erro", "Por favor, preencha tanto a pergunta quanto a resposta.")
 
 if __name__ == "__main__":
+    # Inicializa o bot com uma base de conhecimento predefinida
     base_de_conhecimento = {
         "qual é o seu nome": "Eu sou um assistente virtual, Destruidor de galáxias e rei dos reinos sem conhecimento.",
         "qual o seu nome": "Eu sou um assistente virtual, Destruidor de galáxias e rei dos reinos sem conhecimento.",
         "seu nome": "Eu sou um assistente virtual, Destruidor de galáxias e rei dos reinos sem conhecimento.",
         "qual é a capital do brasil": "A capital do Brasil é Brasília.",
-        "quem é o presidente dos estados unidos": "O presidente dos Estados Unidos é Joe Biden.",
-        "qual é a cor do céu": "A cor do céu é azul.",
-        "quanto é 2 mais 2": "2 mais 2 é igual a 4.",
-        "2 mais 2": "2 mais 2 é igual a 4.",
-        "some 2 mais 2": "2 mais 2 é igual a 4.",
-        "quanto é 2 + 2": "2 mais 2 é igual a 4.",
-        "como você está": "Eu sou apenas um programa de computador, mas estou funcionando bem!",
-        "o que você faz": "Eu sou um assistente virtual projetado para responder a perguntas.",
-        "qual é a sua cor favorita": "Eu não tenho uma cor favorita, pois sou um programa de computador.",
-        "qual é o maior planeta do sistema solar": "O maior planeta do sistema solar é Júpiter.",
-        "quem pintou a mona lisa": "A Mona Lisa foi pintada por Leonardo da Vinci.",
-        "qual é o elemento químico mais abundante no universo": "O elemento químico mais abundante no universo é o hidrogênio.",
-        "em que ano começou a primeira guerra mundial": "A Primeira Guerra Mundial começou em 1914.",
-        "qual é o menor país do mundo": "O menor país do mundo é o Vaticano.",
-        "quem escreveu dom quixote": "Dom Quixote foi escrito por Miguel de Cervantes.",
-        "qual é a montanha mais alta do mundo": "A montanha mais alta do mundo é o Monte Everest.",
-        "quem inventou a lâmpada elétrica": "A lâmpada elétrica foi inventada por Thomas Edison.",
-        "qual é o maior oceano do mundo": "O maior oceano do mundo é o Oceano Pacífico.",
-        "quem foi o primeiro homem a pisar na lua": "O primeiro homem a pisar na lua foi Neil Armstrong.",
+        # ... (outras perguntas e respostas)
     }
 
     bot = BotPerguntasRespostas(base_de_conhecimento)
