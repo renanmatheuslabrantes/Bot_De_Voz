@@ -30,7 +30,7 @@ Este é um bot de perguntas e respostas com interface gráfica, desenvolvido em 
 
 2. Navegue até o diretório do projeto:
    ```
-   cd bot-perguntas-respostas
+   cd Bot_De_Voz
    ```
 
 3. Instale as dependências:
@@ -43,7 +43,7 @@ Este é um bot de perguntas e respostas com interface gráfica, desenvolvido em 
 Para iniciar o bot, execute o seguinte comando no terminal:
 
 ```
-python bot_perguntas_respostas.py
+python Bot_De_Voz.py
 ```
 
 A interface gráfica será aberta, permitindo que você interaja com o bot.
