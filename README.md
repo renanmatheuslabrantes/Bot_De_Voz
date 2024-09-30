@@ -2,6 +2,8 @@
 
 Este é um bot de perguntas e respostas com interface gráfica, desenvolvido em Python. O bot utiliza uma base de conhecimento predefinida e permite a adição de novas informações durante a execução.
 
+![WhatsApp Image 2024-09-30 at 11 33-horz](https://github.com/user-attachments/assets/583512a9-6b63-4306-8c0c-4c3521843fdd)
+
 ## Funcionalidades
 
 - Interface gráfica amigável
