@@ -79,5 +79,3 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 Renan Matheus
 
 ---
-
-Esperamos que este bot seja útil e divertido de usar! Se tiver alguma dúvida ou sugestão, não hesite em entrar em contato.
