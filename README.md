@@ -76,7 +76,7 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ## Autor
 
-Feito por Renan Matheus
+Renan Matheus
 
 ---
 
